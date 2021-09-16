@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"math/rand"
 	"time"
@@ -8,7 +9,8 @@ import (
 
 func main() {
 	var c = make(chan int, 10)
-	timeout:= time.After(time.Second * 5)
+	// timeout:= time.After(time.Second * 5)
+	ctx, _:= context.WithTimeout(context.Background(), time.Second*10)
 	for {
 		select {
 		case val := <-c:
@@ -17,10 +19,9 @@ func main() {
 			var x = rand.Intn(100)
 			log.Printf("send val %d into channel", x)
 			c <- x
-		case <- timeout :
+		case <-ctx.Done():
 			log.Println("timeout !!! ")
-			return 
+			return
 		}
 	}
-
 }

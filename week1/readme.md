@@ -49,3 +49,25 @@ func main() {
 
 }
 ```
+
+或者使用 context 控制超时
+
+```go
+func main() {
+	var c = make(chan int, 10)
+	ctx, _:= context.WithTimeout(context.Background(), time.Second*10)
+	for {
+		select {
+		case val := <-c:
+			log.Printf("received val from channel : %v\n", val)
+		case <-time.After(time.Second):
+			var x = rand.Intn(100)
+			log.Printf("send val %d into channel", x)
+			c <- x
+		case <-ctx.Done():
+			log.Println("timeout !!! ")
+			return
+		}
+	}
+}
+```
