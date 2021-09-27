@@ -61,7 +61,7 @@ func main() {
 
 
 const (
-	HEALTH_CODE = 20
+	HEALTH_CODE = 200
 	VERSION     = "VERSION"
 )
 
