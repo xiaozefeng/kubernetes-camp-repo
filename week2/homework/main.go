@@ -36,6 +36,12 @@ func main() {
 	})
 
 	g.Go(func() error {
+		<-errCtx.Done()
+		log.Printf("stopping http server\n")
+		return srv.Shutdown(errCtx)
+	})
+
+	g.Go(func() error {
 		done := make(chan os.Signal, 1)
 		signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 		select {
