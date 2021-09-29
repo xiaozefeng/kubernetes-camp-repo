@@ -2,10 +2,10 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"net"
 	"os"
@@ -58,21 +58,39 @@ func handleConnection(ctx context.Context, conn net.Conn) {
 		return
 	}
 	log.Printf("req: %+v\n", req)
-	version := getOSEnv(VERSION, "")
-	log.Printf("version: %v\n", version)
+
 	if req.Path == "/healthz" {
-		write(conn, []byte("20"), version)
+		write(conn, req, []byte("200"))
 	} else {
-		write(conn, []byte(req.Path), version)
+		write(conn, req, []byte(req.Path))
 	}
 }
 
-func write(conn net.Conn, v []byte, version string) (int, error) {
-	data := fmt.Sprintf("HTTP/1.1 200 OK\nDate: %v\nContent-Length:%d\nContent-Type: %s\nVersion:%s\n\n%s\n",
-		time.Now(),
-		len(v),
-		"text/plain;charset=UTF-8",
-		version,
+func getResponseHeader(header map[string]string) string {
+	var buf bytes.Buffer
+	for k, v := range header {
+		if k == "Accept" || k == "User-Agent"{
+			continue
+		}
+		buf.WriteString(k)
+		buf.WriteByte(':')
+		buf.WriteByte(' ')
+		buf.WriteString(v)
+		buf.WriteByte('\n')
+	}
+	res:=buf.String()
+	return res[:len(res)-1]
+}
+
+func write(conn net.Conn, req *HTTPRequest, v []byte) (int, error) {
+	req.Header["Date"] = time.Now().String()
+	req.Header["Content-Length"] = fmt.Sprintf("%d", len(v))
+	req.Header["Content-Type"] = "text/plain;charset=UTF-8"
+	req.Header[VERSION] = getOSEnv(VERSION, "")
+
+	var header = getResponseHeader(req.Header)
+	data := fmt.Sprintf("HTTP/1.1 200 OK\n%s\n\n%s\n",
+		header,
 		v)
 	return conn.Write([]byte(data))
 }
@@ -127,6 +145,6 @@ type HTTPRequest struct {
 	Path        string
 	Protocal    string
 	Header      map[string]string
-	Body        io.Reader
+	// Body        io.Reader
 	ReomoteAddr string
 }
