@@ -3,12 +3,12 @@
 
 
 ## precheck
-- 我的任意节点操作系统为 CentOS 7.8 或者 CentOS Stream 8
-- 我的任意节点 CPU 内核数量大于等于 2，且内存大于等于 4G
-- 我的任意节点 hostname 不是 localhost，且不包含下划线、小数点、大写字母
-- 我的任意节点都有固定的内网 IP 地址
-- 我的任意节点都只有一个网卡，如果有特殊目的，我可以在完成 K8S 安装后再增加新的网卡
-- 我的任意节点上 Kubelet使用的 IP 地址 可互通（无需 NAT 映射即可相互访问），且没有防火墙、安全组隔离
+- 任意节点操作系统为 CentOS 7.8 或者 CentOS Stream 8
+- 任意节点 CPU 内核数量大于等于 2，且内存大于等于 4G
+- 任意节点 hostname 不是 localhost，且不包含下划线、小数点、大写字母
+- 任意节点都有固定的内网 IP 地址
+- 任意节点都只有一个网卡
+- 任意节点上 Kubelet使用的 IP 地址 可互通（无需 NAT 映射即可相互访问），且没有防火墙、安全组隔离
 
 ### Linux Distributioin Version 
 ```bash
@@ -255,3 +255,16 @@ wget https://kuboard.cn/install-script/v1.21.x/calico-custom-resources.yaml
 sed -i "s#192.168.0.0/16#${POD_SUBNET}#" calico-custom-resources.yaml
 kubectl apply -f calico-custom-resources.yaml
 ```
+
+## kubectl alias
+```bash
+yum install -y bash-completion
+
+echo "source <(kubectl completion bash)" >> ~/.bashrc 
+echo "alias k=kubectl" >> ~/.bashrc 
+echo "complete -F __start_kubectl k" >>~/.bashrc 
+
+```
+
+### usage
+k get node
