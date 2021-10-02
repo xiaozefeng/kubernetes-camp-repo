@@ -7,9 +7,9 @@ build:
 
 release: build 
 	echo "building http servre container"
-	docker build -t cncamp/httpserver:${tag} .
+	docker build -t registry.cn-hangzhou.aliyuncs.com/zdbc/httpserver:${tag} .
 
 push: release
 	echo "pushing cncamp/httpserver"
-	docker push cncamp/httpserver:${tag}
+	docker push registry.cn-hangzhou.aliyuncs.com/zdbc/httpserver:${tag}
 
