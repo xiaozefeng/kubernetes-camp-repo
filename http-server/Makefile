@@ -2,7 +2,7 @@ export tag=v1.0
 
 build:
 	echo "building http server binary"
-	mkdir bin/amd64
+	mkdir -p bin/amd64
 	CGO_EANBLED=0 GOOS=linux GOARCH=amd64  go build -v -o bin/amd64 .
 
 release: build 
