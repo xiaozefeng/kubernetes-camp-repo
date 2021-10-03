@@ -1,7 +1,7 @@
 FROM alpine:3.9
 
-copy bin/amd64/httpserver /httpserver
+ADD bin/amd64/httpserver /httpserver
 
-expose 9090
+EXPOSE 9090
 
 ENTRYPOINT /httpserver
