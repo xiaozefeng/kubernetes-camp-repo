@@ -1,0 +1,16 @@
+appVersion: v1
+kind: Service
+metadata:
+  name: httpserver-service
+  labels:
+    app: httpserver
+spec:
+  selector:
+    app: httpserver
+  ports:
+  - name: httpserver-port
+    protocol: TCP
+    port: 80
+    nodePort: 32600
+    targetPort: 9090
+  type: NodePort
