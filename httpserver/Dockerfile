@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM alpine:3.13.6
 
 ADD bin/amd64/httpserver /httpserver
 

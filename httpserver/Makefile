@@ -3,7 +3,7 @@ export tag=v1.0
 build:
 	echo "building http server binary"
 	mkdir -p bin/amd64
-	CGO_EANBLED=0 GOOS=linux GOARCH=amd64  go build -v -o bin/amd64 .
+	CGO_EANBLED=0 GOOS=linux GOARCH=amd64  go build  -tags netgo -v -o bin/amd64 .
 
 release: build 
 	echo "building http servre container"
