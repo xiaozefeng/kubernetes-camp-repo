@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-as-volume-special-path
+spec:
+  containers:
+    - name: config-as-volume-special-path-container
+      image: nginx:1.17.9
+      volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: special-config
+        items:
+          - key: SPECIAL_LEVEL
+            paths: keys
+  restartPolicy: Never

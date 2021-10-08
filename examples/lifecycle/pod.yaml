@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lifecycle-demo
+spec:
+  containers:
+    - name: lifecycle-demo-container
+      image: nginx:1.17.9
+      lifecycle:
+        postStart:
+          exec:
+            command: ["/bin/sh", "-c", "echo Hello from the postStart hander  > /usr/share/message"]
+        preStop:
+          exec:
+            command: ["/usr/sbin/nginx", "-s", "quit"]

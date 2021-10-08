@@ -5,9 +5,10 @@ metadata:
 spec:
   containers:
     - name: test-container
-      image: busybox
-      entrypoint: ["/bin/sh", "-c", "sleep", "36000"]
+      image: registry.cn-hangzhou.aliyuncs.com/zdbc/envserver:v1.0
       envFrom:
       - configMapRef:
           name: special-config
   restartPolicy: Never
+  imagePullSecrets:
+    - name: regcred
