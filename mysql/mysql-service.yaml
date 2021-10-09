@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-sre
+  namespace: sre
+spec:
+  type: NodePort
+  ports:
+    - name: mysqlport
+      protocol: TCP
+      port: 3306
+      targetPort: dbport
+      nodePort: 30106
+  selector:
+    app: mysql-sre

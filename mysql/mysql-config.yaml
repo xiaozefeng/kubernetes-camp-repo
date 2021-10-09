@@ -11,7 +11,6 @@ data:
     datadir         = /var/lib/mysql
     log-error      = /var/log/mysql/error.log
     bind-address   = 0.0.0.0
-    # Disabling symbolic-links is recommended to prevent assorted security risks
     symbolic-links=0
     max_connections=1000
     default_storage_engine=innodb

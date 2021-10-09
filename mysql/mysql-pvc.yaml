@@ -11,4 +11,4 @@ spec:
     requests:
       storage: 20Gi
   volumeName:
-    storageClassName: nfs
+  storageClassName: nfs
