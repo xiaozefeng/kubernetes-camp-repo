@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-sre
+  name: mysql-storage-pvc
   namespace: sre
 
 spec:
@@ -11,4 +11,4 @@ spec:
     requests:
       storage: 20Gi
   volumeName:
-  storageClassName: nfs
+  storageClassName: mysql-storage
