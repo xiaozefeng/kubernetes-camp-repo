@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka
+  namespace: sre
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: 8761
+      protocol: TCP
+      targetPort: 8761
+  selector:
+    app: eureka
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: sre
+  name: eureka-nodeport
+  labels:
+    app: eureka
+spec:
+  ports:
+    - protocol: TCP
+      port: 18761
+      targetPort: 8761
+      nodePort: 30010
+  selector:
+    app: eureka
+  type: NodePort
+  sessionAffinity: ClientIP
