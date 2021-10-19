@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: EUREKA-SERVER
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: ${EUREKA_INSTANCE_HOST_NAME}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: ${EUREKA_INSTANCE_LIST}
+  server:
+    enable-self-preservation: true
+    response-cache-auto-expiration-in-seconds: 180
+    response-cache-update-interval-ms: 10000
+    eviction-interval-timer-in-ms: 10000
