@@ -80,5 +80,5 @@ lsns
 
 ### UnionFS  FS: File System 联合文件系统
 分层文件系统
-OverLayer FS
+Overlay FS
 Copy On Write : 需要修改原来在 image层中的数据， 会在拷贝一份到最上层，再修改，所以不会影响底层， 如果是删除，会增加一个 白障， 遮挡下层的数据
