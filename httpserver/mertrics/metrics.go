@@ -21,6 +21,10 @@ func Register() {
 	}
 }
 
+func NewTimer() *ExecutionTimer {
+	return NewExecutionTimer(functionLatency)
+}
+
 func CreateExecutionTimeMetric(namespace, help string) *prometheus.HistogramVec {
 	return prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{

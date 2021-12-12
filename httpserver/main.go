@@ -5,16 +5,19 @@ import (
 	"flag"
 	"fmt"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"golang.org/x/sync/errgroup"
 
 	"github.com/fsnotify/fsnotify"
+	"httpserver/mertrics"
 	_ "net/http/pprof"
 )
 
@@ -125,6 +128,10 @@ const (
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
 	version := getOSEnv(VERSION, "")
 	w.Header().Set(VERSION, version)
+	timer := mertrics.NewTimer()
+	defer timer.ObserveTotal()
+	delay := randInt(10, 2000)
+	time.Sleep(time.Millisecond * time.Duration(delay))
 	logrus.Infof("http response code:200\n")
 	_, _ = fmt.Fprintln(w, "every thing's be ok")
 
@@ -146,4 +153,9 @@ func getOSEnv(key, defaultValue string) string {
 
 func getRealIP(r *http.Request) string {
 	return r.RemoteAddr
+}
+
+func randInt(min int, max int) int {
+	rand.Seed(time.Now().UTC().UnixNano())
+	return min + rand.Intn(max-min)
 }
