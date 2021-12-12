@@ -27,3 +27,4 @@ loki 日志系统
 grafna 
 
 
+rsyslog 了解一下

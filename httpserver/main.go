@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,6 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	"github.com/fsnotify/fsnotify"
+	_ "net/http/pprof"
 )
 
 // 有两种方式实现http server
@@ -23,7 +25,7 @@ import (
 var cfg string
 
 func init() {
-	flag.StringVar(&cfg, "c", "", "config path")
+	flag.StringVar(&cfg, "c", "conf/conf.yaml", "config path")
 	flag.Parse()
 }
 
@@ -54,7 +56,6 @@ func initConfig(cfg string) error {
 }
 
 func initLog() error {
-	logrus.SetFormatter(&logrus.JSONFormatter{})
 	level, err := logrus.ParseLevel(viper.GetString("log.level"))
 	if err != nil {
 		return err
@@ -74,9 +75,14 @@ func main() {
 		logrus.Fatal(err)
 	}
 
+	mux := http.NewServeMux()
+	mux.HandleFunc("/hello", HelloHandler)
+	mux.HandleFunc("/healthz", Healthz)
+	mux.Handle("/metrics", promhttp.Handler())
+
 	srv := &http.Server{
 		Addr:    viper.GetString("addr"),
-		Handler: &Router{},
+		Handler: mux,
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -116,28 +122,18 @@ const (
 	VERSION     = "VERSION"
 )
 
-// 1. 接收客户端 request，并将 request 中带的 header 写入 response header
-// 2. 读取当前系统的环境变量中的 VERSION 配置，并写入 response header
-// 3. Server 端记录访问日志包括客户端 IP，HTTP 返回码，输出到 server 端的标准输出
-// 4. 当访问 localhost/healthz 时，应返回 20
-type Router struct{}
+func HelloHandler(w http.ResponseWriter, r *http.Request) {
+	version := getOSEnv(VERSION, "")
+	w.Header().Set(VERSION, version)
+	logrus.Infof("http response code:200\n")
+	_, _ = fmt.Fprintln(w, "every thing's be ok")
 
-func (*Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+}
+func Healthz(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	fmt.Printf("client ip:%s path: %s\n", getRealIP(r), path)
-	if path == "/healthz" {
-		logrus.Infof("http response code:200\n")
-		fmt.Fprintln(w, HEALTH_CODE)
-	} else if path == "/debug" {
-		logrus.Debug("this is debug request")
-		fmt.Fprintln(w, HEALTH_CODE)
-	} else {
-		// handle other request
-		version := getOSEnv(VERSION, "")
-		w.Header().Set(VERSION, version)
-		logrus.Infof("http response code:200\n")
-		fmt.Fprintln(w, "every thing's be ok")
-	}
+	logrus.Infof("http response code:200\n")
+	_, _ = fmt.Fprintln(w, HEALTH_CODE)
 }
 
 func getOSEnv(key, defaultValue string) string {
