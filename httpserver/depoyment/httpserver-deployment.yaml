@@ -9,18 +9,27 @@ spec:
   replicas: 2
   template:
     metadata:
-      anootations:
+      annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "80"
       labels:
         app: httpserver
     spec:
+      volumes:
+        - name: http-config
+          configMap:
+            name: http-server
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: httpserver
           imagePullPolicy: Always
-          image: registry.cn-hangzhou.aliyuncs.com/zdbc/httpserver:v1.1
+          image: registry.cn-hangzhou.aliyuncs.com/zdbc/httpserver:v1.2
           ports:
             - containerPort: 9090
+          volumeMounts:
+            - mountPath: /etc/conf.yaml
+              name: http-server
 
           resources:
             requests:
@@ -28,7 +37,7 @@ spec:
               cpu: 500m
             limits:
               memory: 1Gi
-              cpu: 2
+              cpu: "2"
               
           livenessProbe:
             httpGet:
@@ -43,5 +52,4 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 3
 
-      imagePullSecrets:
-        - name: regcred
+
