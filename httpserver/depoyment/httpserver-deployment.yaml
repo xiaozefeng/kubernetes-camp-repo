@@ -24,7 +24,7 @@ spec:
       containers:
         - name: httpserver
           imagePullPolicy: Always
-          image: registry.cn-hangzhou.aliyuncs.com/zdbc/httpserver:v1.2
+          image: registry.cn-hangzhou.aliyuncs.com/zdbc/httpserver:v1.7
           ports:
             - containerPort: 9090
           volumeMounts:
