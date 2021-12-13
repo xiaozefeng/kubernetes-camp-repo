@@ -29,7 +29,7 @@ spec:
             - containerPort: 9090
           volumeMounts:
             - mountPath: /etc/conf.yaml
-              name: http-server
+              name: http-config
 
           resources:
             requests:
