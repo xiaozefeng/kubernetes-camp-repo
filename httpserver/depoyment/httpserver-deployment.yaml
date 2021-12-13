@@ -9,6 +9,9 @@ spec:
   replicas: 2
   template:
     metadata:
+      anootations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
       labels:
         app: httpserver
     spec:
