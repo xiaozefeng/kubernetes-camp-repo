@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
         - name: httpserver
+          imagePullPolicy: Always
           image: registry.cn-hangzhou.aliyuncs.com/zdbc/httpserver:v1.1
           ports:
             - containerPort: 9090
