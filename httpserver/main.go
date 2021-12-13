@@ -28,7 +28,7 @@ import (
 var cfg string
 
 func init() {
-	flag.StringVar(&cfg, "c", "conf/conf.yaml", "config path")
+	flag.StringVar(&cfg, "c", "/etc/conf/conf.yaml", "config path")
 	flag.Parse()
 }
 
