@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-pdb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-pdb
+  template:
+    metadata:
+      labels:
+        app: nginx-pdb
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
