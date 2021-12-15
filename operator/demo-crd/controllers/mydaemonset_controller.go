@@ -19,15 +19,14 @@ package controllers
 import (
 	"context"
 	"fmt"
+	appsv1beta1 "github.com/kubernetes-camp-repo/api/v1beta1"
 	v1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v12 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-
-	appsv1beta1 "github.com/kubernetes-camp-repo/api/v1beta1"
 )
 
 // MyDaemonsetReconciler reconciles a MyDaemonset object
@@ -51,48 +50,40 @@ type MyDaemonsetReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
 func (r *MyDaemonsetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
-	var myDaemonSet appsv1beta1.MyDaemonset
-	err := r.Client.Get(ctx, req.NamespacedName, &myDaemonSet)
-	if err != nil {
+	myds := &appsv1beta1.MyDaemonset{}
+	if err := r.Client.Get(ctx, req.NamespacedName, myds); err != nil {
 		fmt.Println(err)
-		return ctrl.Result{}, err
 	}
-	var nl v1.NodeList
-	if myDaemonSet.Spec.Image != "" {
-		err := r.Client.List(ctx, &nl)
-		if err != nil {
+	nl := &v1.NodeList{}
+	if myds.Spec.Image != "" {
+		if err := r.Client.List(ctx, nl); err != nil {
 			fmt.Println(err)
-			return ctrl.Result{}, err
 		}
 		for _, n := range nl.Items {
 			p := v1.Pod{
-				TypeMeta: metav1.TypeMeta{
+				TypeMeta: v12.TypeMeta{
 					APIVersion: "v1",
 					Kind:       "Pod",
 				},
-				ObjectMeta: metav1.ObjectMeta{
+				ObjectMeta: v12.ObjectMeta{
 					GenerateName: fmt.Sprintf("%s-", n.Name),
-					Namespace:    n.Namespace,
+					Namespace:    myds.Namespace,
 				},
 				Spec: v1.PodSpec{
 					Containers: []v1.Container{
 						{
-							Image: myDaemonSet.Spec.Image,
+							Image: myds.Spec.Image,
 							Name:  "container",
 						},
 					},
 					NodeName: n.Name,
 				},
 			}
-			err = r.Client.Create(ctx, &p)
-			if err != nil {
+			if err := r.Client.Create(ctx, &p); err != nil {
 				fmt.Println(err)
-				return ctrl.Result{}, err
 			}
-
 		}
 	}
-
 	return ctrl.Result{}, nil
 }
 
