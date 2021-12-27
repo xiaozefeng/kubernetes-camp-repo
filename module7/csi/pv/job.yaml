@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: harbor-job-pv
+  labels:
+    type: local
+spec:
+  storageClassName: harbor-job
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/job"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: harbor-job-pvc
+spec:
+  storageClassName: harbor-job
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
