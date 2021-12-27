@@ -1,0 +1,6 @@
+configdb:
+  host: apollo-mysql
+  dbName: ApolloConfigDB
+  userName: root
+  password: 123456
+  connectionStringProperties: characterEncoding=utf8&useSSL=false
