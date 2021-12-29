@@ -1,23 +1,11 @@
 portaldb:
-  host: apollodb-mysql.mysql
-  dbName: ApolloPortalDBName
-  userName: someUserName
-  password: somePassword
+  host: sre.mysql
+  userName: root
+  password: 1qaz@WSX
   connectionStringProperties: characterEncoding=utf8&useSSL=false
 config:
   envs: dev
   metaServers:
-    dev: http://apollo-service-dev-apollo-configservice:8080
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
-    nginx.ingress.kubernetes.io/session-cookie-conditional-samesite-none: "true"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"  
-  hosts:
-    - host: apollo-portal
-      paths:
-        - /
+    dev: http://apollo-service-dev-apollo-configservice.sre:8080
+service:
+  type: LoadBalancer
