@@ -1,5 +1,11 @@
 configdb:
-  host: sre.mysql
+  host: mysql.sre
   userName: root
   password: 1qaz@WSX
   connectionStringProperties: characterEncoding=utf8&useSSL=false
+configService:
+  nodeSelector:
+    disktype: ssd
+adminService:
+  nodeSelector:
+    disktype: ssd

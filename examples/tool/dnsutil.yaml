@@ -5,6 +5,15 @@ metadata:
   labels:
     app: dnsutil
 spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: cc
+                operator: In
+                values:
+                  - uni2
   containers:
     - name: dnsutil
       command:

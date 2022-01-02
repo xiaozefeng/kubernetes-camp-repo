@@ -1,11 +1,11 @@
 portaldb:
-  host: sre.mysql
+  host: mysql.sre
   userName: root
   password: 1qaz@WSX
   connectionStringProperties: characterEncoding=utf8&useSSL=false
 config:
-  envs: dev
+  envs: pro
   metaServers:
-    dev: http://apollo-service-dev-apollo-configservice.sre:8080
-service:
-  type: LoadBalancer
+    pro: http://apollo-service-pro-apollo-configservice.sre:8080
+nodeSelector:
+  disktype: ssd
