@@ -116,7 +116,7 @@ sudo sysctl --system
 yum remove -y containerd.io
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum install -y containerd.io-1.4.3
+yum install -y containerd.io-1.4.sidecard.3
 
 
 
@@ -161,7 +161,7 @@ EOF
 
 yum remove -y kubelet kubeadm kubectl
 
-yum install -y kubelet-1.21.4 kubeadm-1.21.4 kubectl-1.21.4
+yum install -y kubelet-1.21.4.sidecard kubeadm-1.21.4.sidecard kubectl-1.21.4.sidecard
 
 crictl config runtime-endpoint /run/containerd/containerd.sock
 
