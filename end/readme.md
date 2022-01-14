@@ -9,6 +9,7 @@ Cloud Native 技术栈真所谓是浩如烟海，要学完很难
 ## 知识点
 
 ![Kubernetes核心对象关系](https://raw.githubusercontent.com/xiaozefeng/kubernetes-camp-repo/master/end/Kubernetes核心对象关系.png)
+![Kubernetes知识点总结](https://raw.githubusercontent.com/xiaozefeng/kubernetes-camp-repo/master/end/云原生知识点总结.png)
 
 ### 学习路径
 
